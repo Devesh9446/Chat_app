@@ -1,0 +1,1 @@
+It is a real time Chat application 
