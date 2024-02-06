@@ -1,11 +1,11 @@
-import React,{useState,useEffect} from 'react';
-import styled from 'styled-components';
+import React,{useState,useEffect} from 'react'
+import styled from 'styled-components'
 import Loader from '../assets/loader.gif';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
-import { useNavigate } from "react-router-dom";
-import {Buffer} from 'buffer';
+import axios from 'axios'
+import { useNavigate } from "react-router-dom"
+import {Buffer} from 'buffer'
 
 function SetAvatar() {
     const navigate =useNavigate();
@@ -19,7 +19,11 @@ function SetAvatar() {
         pauseOnHover: true,
         draggable: true,
         theme: "dark",
-      };
+    };
+    useEffect(() => {
+        if (!localStorage.getItem("chat-app-user"))
+        navigate("/login");
+    }, []);
     useEffect(() => {
         const fetchData = async () => {
             const data = [];
@@ -41,25 +45,26 @@ function SetAvatar() {
     const setProfilePicture=async()=>{
         if(handleValidation())
         {
-            // const user=await JSON.parse(localStorage.getItem("chat-app-user"))
-            // const {data} = await axios.post("URL",{image:avatars[selectedAvatar]})
-            // if(data.status===true)
-            // {
-            //     user.isAvatarSelected=true;
-            //     user.AvatarImage=data.image;
-            //     localStorage.setItem("chat-app-user",JSON.stringify(user))
+            const user=await JSON.parse(localStorage.getItem("chat-app-user"))
+            const {data} = await axios.post("URL",{image:avatars[selectedAvatar]})
+            if(data.status===true)
+            {
+                user.isAvatarSelected=true;
+                user.AvatarImage=data.image
                 navigate("/chat")
-            // }
-            // else{
-            //     toast.error("something went wrong in setting up the avatar",options)
-            // }
+            }
+            else{
+                toast.error("something went wrong in setting up the avatar select again",options)
+            }
         }
     }
     const handleValidation=()=>{
         if(selectedAvatar===undefined)
         {
             toast.error("Select an Avatar",options)
+            return false
         }
+        return true;
     }
 
     return (
