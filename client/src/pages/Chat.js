@@ -23,6 +23,12 @@ function Chat() {
       );
     }
   }, []);
+  useEffect(() => {
+    if (currentUser) {
+      socket.current = io(host);
+      socket.current.emit("add-user", currentUser._id);
+    }
+  }, [currentUser]);
   useEffect(async () => {
     if (currentUser) {
       if (currentUser.isAvatarImageSet) {
